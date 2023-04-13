@@ -1,3 +1,11 @@
+locals {
+  name = "service-b"
+  tags = {
+    environment = "dev"
+    terraform   = "true"
+  }
+}
+
 module "order_service_lambda" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "3.3.0"
@@ -9,20 +17,30 @@ module "order_service_lambda" {
   memory_size   = 256
   timeout       = 30
 
-  vpc_subnet_ids         = module.vpc.private_subnets
-  vpc_security_group_ids = [module.vpc.default_security_group_id]
-
-  source_path = "${path.module}/../../order-service/target/function.zip"
+  source_path = "${path.module}/../../../../order-service/target/function.zip"
 
   environment_variables = {
     ENVIRONMENT = "dev"
   }
 
-  tags = {
-    Environment = "dev"
-  }
+  tags = local.tags
+}
 
-  filename = "order-service-lambda.zip"
+module "order_service_lambda_alias" {
+  source        = "terraform-aws-modules/lambda/aws//modules/alias"
+  refresh_alias = false
+
+  name = "order-Service_lambda_alias"
+
+  function_name    = module.order_service_lambda.lambda_function_name
+  function_version = module.order_service_lambda.lambda_function_version
+
+  allowed_triggers = {
+    AllowExecutionFromELB = {
+      service    = "elasticloadbalancing"
+      source_arn = module.alb.target_group_arns[0]
+    }
+  }
 }
 
 module "config_service_lambda" {
@@ -36,18 +54,29 @@ module "config_service_lambda" {
   memory_size   = 256
   timeout       = 30
 
-  source_path = "${path.module}/../../config-service/target/function.zip"
+  source_path = "${path.module}/../../../../config-service/target/function.zip"
 
-  vpc_subnet_ids         = module.vpc.private_subnets
-  vpc_security_group_ids = [module.vpc.default_security_group_id]
 
   environment_variables = {
     ENVIRONMENT = "dev"
   }
 
-  tags = {
-    Environment = "dev"
-  }
-
-  filename = "config-service-lambda.zip"
+  tags = local.tags
 }
+
+#module "config_service_lambda_alias" {
+#  source        = "terraform-aws-modules/lambda/aws//modules/alias"
+#  refresh_alias = false
+#
+#  name = "config_service_lambda_alias"
+#
+#  function_name    = module.config_service_lambda.lambda_function_name
+#  function_version = module.config_service_lambda.lambda_function_version
+#
+#  allowed_triggers = {
+#    AllowExecutionFromELB = {
+#      service    = "elasticloadbalancing"
+#      source_arn = module.alb.target_group_arns[0] # index should match the correct target_group
+#    }
+#  }
+#}

@@ -10,7 +10,8 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
 
 @QuarkusTest
-public class LambdaHandlerTest {
+public class
+LambdaHandlerTest {
 
     @Test
     public void testSimpleLambdaSuccess() throws Exception {
