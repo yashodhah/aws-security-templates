@@ -9,22 +9,20 @@ module "alb" {
 
   target_groups = [
     {
-      name_prefix = "l1-"
       target_type = "lambda"
       targets = {
         order_service = {
           target_id = module.order_service_lambda_alias.lambda_alias_arn
-          #          attach_lambda_permission = true
         }
       }
     }
   ]
 
   http_tcp_listeners = [
-    # Forward action is default, either when defined or undefined
     {
       port               = 80
       protocol           = "HTTP"
+      path               = "/order-service"
       target_group_index = 0
     }
   ]

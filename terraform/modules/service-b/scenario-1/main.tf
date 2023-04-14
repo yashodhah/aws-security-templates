@@ -8,16 +8,14 @@ locals {
 
 module "order_service_lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "3.3.0"
+  version = "4.13.0"
 
   function_name = "order-service-lambda"
-  runtime       = "java11"
-  handler       = "io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest"
+  runtime       = "nodejs18.x"
+  handler       = "index.handler"
   description   = "AWS Lambda function for order service"
-  memory_size   = 256
-  timeout       = 30
 
-  source_path = "${path.module}/../../../../order-service/target/function.zip"
+  source_path = "${path.module}/../../../../order-service"
 
   environment_variables = {
     ENVIRONMENT = "dev"
@@ -43,27 +41,24 @@ module "order_service_lambda_alias" {
   }
 }
 
-module "config_service_lambda" {
-  source  = "terraform-aws-modules/lambda/aws"
-  version = "3.3.0"
-
-  function_name = "config-service-lambda"
-  runtime       = "java11"
-  handler       = "io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest"
-  description   = "AWS Lambda function for configuration service"
-  memory_size   = 256
-  timeout       = 30
-
-  source_path = "${path.module}/../../../../config-service/target/function.zip"
-
-
-  environment_variables = {
-    ENVIRONMENT = "dev"
-  }
-
-  tags = local.tags
-}
-
+#module "config_service_lambda" {
+#  source  = "terraform-aws-modules/lambda/aws"
+#  version = "4.13.0"
+#
+#  function_name = "config-service-lambda"
+#  runtime       = "nodejs18.x"
+#  handler       = "index.handler"
+#  description   = "AWS Lambda function for configuration service"
+#
+#  source_path = "${path.module}/../../../../config-service"
+#
+#  environment_variables = {
+#    ENVIRONMENT = "dev"
+#  }
+#
+#  tags = local.tags
+#}
+#
 #module "config_service_lambda_alias" {
 #  source        = "terraform-aws-modules/lambda/aws//modules/alias"
 #  refresh_alias = false
@@ -76,7 +71,7 @@ module "config_service_lambda" {
 #  allowed_triggers = {
 #    AllowExecutionFromELB = {
 #      service    = "elasticloadbalancing"
-#      source_arn = module.alb.target_group_arns[0] # index should match the correct target_group
+#      source_arn = module.alb.target_group_arns[1]
 #    }
 #  }
 #}
