@@ -4,8 +4,12 @@ module "alb" {
 
   name            = "service-b-alb"
   vpc_id          = module.vpc.vpc_id
-  subnets         = module.vpc.public_subnets
+  subnets         = module.vpc.private_subnets
   security_groups = [aws_security_group.alb_sg.id]
+
+#  access_logs = {
+#    bucket = aws_s3_bucket.log_bucket.id
+#  }
 
   target_groups = [
     {
@@ -20,9 +24,9 @@ module "alb" {
 
   http_tcp_listeners = [
     {
-      port               = 80
-      protocol           = "HTTP"
-      path               = "/order-service"
+      port     = 80
+      protocol = "HTTP"
+      #      path               = "api/service-b/order-service"
       target_group_index = 0
     }
   ]
