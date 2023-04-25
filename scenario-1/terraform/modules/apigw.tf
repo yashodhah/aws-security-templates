@@ -1,5 +1,5 @@
 resource "aws_apigatewayv2_api" "api_gw" {
-  name          = "${local.name}=apigw"
+  name          = "${local.name}-apigw"
   protocol_type = "HTTP"
 }
 
@@ -14,9 +14,11 @@ resource "aws_apigatewayv2_integration" "alb_integrations" {
 }
 
 resource "aws_apigatewayv2_route" "gateway_service_a_route" {
-  api_id    = aws_apigatewayv2_api.api_gw.id
-  route_key = "ANY /{proxy+}"
-  target    = "integrations/${aws_apigatewayv2_integration.alb_integrations.id}"
+  api_id             = aws_apigatewayv2_api.api_gw.id
+  authorizer_id      = aws_apigatewayv2_authorizer.jwt_auth.id
+  authorization_type = "JWT"
+  route_key          = "ANY /{proxy+}"
+  target             = "integrations/${aws_apigatewayv2_integration.alb_integrations.id}"
 }
 
 resource "aws_apigatewayv2_vpc_link" "vpc_link" {
@@ -31,9 +33,20 @@ resource "aws_apigatewayv2_stage" "apigw_stage" {
   name        = "api"
   auto_deploy = true
 
-  access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.this.arn
-    format          = "JSON"
+  #  access_log_settings {
+  #    destination_arn = aws_cloudwatch_log_group.this.arn
+  #    format          = "JSON"
+  #  }
+}
+
+resource "aws_apigatewayv2_authorizer" "jwt_auth" {
+  api_id           = aws_apigatewayv2_api.api_gw.id
+  authorizer_type  = "JWT"
+  identity_sources = ["$request.header.Authorization"]
+  name             = "jwt-authorizer"
+  jwt_configuration {
+    audience = [aws_cognito_user_pool_client.user_pool_client.id]
+    issuer   = "https://cognito-idp.ap-south-1.amazonaws.com/${aws_cognito_user_pool.pool.id}"
   }
 }
 

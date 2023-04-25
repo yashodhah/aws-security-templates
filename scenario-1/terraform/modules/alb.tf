@@ -4,18 +4,19 @@ module "alb" {
 
   name            = "service-b-alb"
   vpc_id          = module.vpc.vpc_id
+  internal        = true
   subnets         = module.vpc.private_subnets
   security_groups = [aws_security_group.alb_sg.id]
 
-#  access_logs = {
-#    bucket = aws_s3_bucket.log_bucket.id
-#  }
+  #  access_logs = {
+  #    bucket = aws_s3_bucket.log_bucket.id
+  #  }
 
   target_groups = [
     {
       target_type = "lambda"
       targets = {
-        order_service = {
+        lambda_with_allowed_triggers = {
           target_id = module.order_service_lambda_alias.lambda_alias_arn
         }
       }
@@ -40,7 +41,7 @@ resource "aws_security_group" "alb_sg" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    description = "TLS from VPC"
+    description = "Allow all from VPC"
     from_port   = 0
     to_port     = 0
     protocol    = -1
@@ -48,6 +49,7 @@ resource "aws_security_group" "alb_sg" {
   }
 
   egress {
+    description = "Allow all to VPC"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
