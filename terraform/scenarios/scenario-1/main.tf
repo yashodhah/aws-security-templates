@@ -15,3 +15,7 @@ module "core-service" {
   tags              = local.tags
   source_root       = "scenario-1"
 }
+
+module "external-service" {
+  source      = "../../modules/external-service"
+}

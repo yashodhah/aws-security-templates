@@ -4,8 +4,8 @@ module "alb" {
 
   name            = "${local.name}-LB"
   vpc_id          = module.vpc.vpc_id
-#  internal        = true
-  subnets         = module.vpc.public_subnets
+  internal        = true
+  subnets         = module.vpc.private_subnets
   security_groups = [aws_security_group.alb_sg.id]
 
   #  access_logs = {
