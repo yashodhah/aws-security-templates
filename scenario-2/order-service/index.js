@@ -1,10 +1,7 @@
-const isAuthorized = require("./authorizer");
+import {isAuthorized} from "./authorizer.js";
 
-exports.handler = async (event) => {
-    // Get the access token from the request headers
-    const accessToken = event.headers.Authorization.split(' ')[1];
-
-    if(!await isAuthorized(accessToken)) {
+export async function handler(event) {
+    if (!await isAuthorized(event.headers)) {
         return {
             statusCode: 401,
             headers: {
@@ -15,7 +12,7 @@ exports.handler = async (event) => {
         };
     }
 
-    return  {
+    return {
         statusCode: 200,
         headers: {
             'Content-Type': 'text/plain'
@@ -23,4 +20,4 @@ exports.handler = async (event) => {
         body: 'Hello from order service',
         isBase64Encoded: false
     };
-};
+}

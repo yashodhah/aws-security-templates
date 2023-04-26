@@ -4,7 +4,7 @@ output "http_tcp_listener_arns" {
 }
 
 output "core_vpc_id" {
-  value       = module.vpc.id
+  value       = module.vpc.vpc_id
   description = "Core VPC ID"
 }
 

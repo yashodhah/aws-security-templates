@@ -15,10 +15,12 @@ module "order_service_lambda" {
   handler       = "index.handler"
   description   = "AWS Lambda function for order service"
 
-  source_path = "${path.module}/../../order-service"
+  source_path = "${path.module}/../../../${var.source_root}/order-service"
 
   environment_variables = {
     ENVIRONMENT = "dev"
+    USER_POOL_ID= aws_cognito_user_pool.pool.id
+    CLIENT_ID = aws_cognito_user_pool_client.user_pool_client.id
   }
 
   tags = local.tags

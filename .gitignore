@@ -38,5 +38,11 @@ build/
 ### Mac OS ###
 .DS_Store
 
-**/.terraform*
 **/node_modules
+
+.terraform
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+terraform/scenarios/*/builds/**
+terraform_output_*.json

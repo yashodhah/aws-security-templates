@@ -1,4 +1,4 @@
-import { CognitoJwtVerifier } from "aws-jwt-verify";
+import {CognitoJwtVerifier} from "aws-jwt-verify";
 
 const userPoolId = process.env.USER_POOL_ID;
 const clientId = process.env.CLIENT_ID;
@@ -10,12 +10,15 @@ const verifier = CognitoJwtVerifier.create({
     clientId: clientId,
 });
 
-async function isAuthorized(headers) {
-    if (headers.hasOwnProperty('Authorization')) {
-        const accessToken = headers.Authorization.split(' ')[1];
+export async function isAuthorized(headers) {
+    console.log(userPoolId, clientId);
+
+    if (headers.hasOwnProperty('authorization')) {
+        const accessToken = headers.authorization.split(' ')[1];
 
         return isValidToken(accessToken);
     } else {
+        console.log("No Access token");
         return false;
     }
 }
@@ -35,4 +38,3 @@ async function isValidToken(token) {
     }
 }
 
-module.exports = isAuthorized;
