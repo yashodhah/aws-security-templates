@@ -7,8 +7,9 @@ resource "aws_cognito_user_pool_domain" "pool_domain" {
   user_pool_id = aws_cognito_user_pool.pool.id
 }
 
+#TODO
 resource "aws_cognito_resource_server" "resource" {
-  identifier = "https://${local.name}.com"
+  identifier = "${local.name}-resource-serer"
   name       = "${local.name}-resource-server"
 
   scope {
