@@ -6,19 +6,25 @@ resource "aws_apigatewayv2_api" "api_gw" {
 resource "aws_apigatewayv2_integration" "alb_integrations" {
   api_id           = aws_apigatewayv2_api.api_gw.id
   integration_type = "HTTP_PROXY"
-  integration_uri  = aws_lb_listener.http_listner.arn
+  integration_uri  = aws_lb_listener.http_listener.arn
 
   integration_method = "ANY"
   connection_type    = "VPC_LINK"
   connection_id      = aws_apigatewayv2_vpc_link.vpc_link.id
+
+  request_parameters = {
+    "overwrite:path" = "$request.path"
+  }
 }
 
+#TODO change scope details
 resource "aws_apigatewayv2_route" "gateway_service_a_route" {
-  api_id             = aws_apigatewayv2_api.api_gw.id
-  authorizer_id      = aws_apigatewayv2_authorizer.jwt_auth.id
-  authorization_type = "JWT"
-  route_key          = "ANY /{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.alb_integrations.id}"
+  api_id               = aws_apigatewayv2_api.api_gw.id
+  authorizer_id        = aws_apigatewayv2_authorizer.jwt_auth.id
+  authorization_type   = "JWT"
+  authorization_scopes = ["base-model-service-resource-serer/order:read"]
+  route_key            = "ANY /order-service/{proxy+}"
+  target               = "integrations/${aws_apigatewayv2_integration.alb_integrations.id}"
 }
 
 resource "aws_apigatewayv2_vpc_link" "vpc_link" {

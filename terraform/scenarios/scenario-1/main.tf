@@ -45,13 +45,33 @@ resource "aws_lb_target_group_attachment" "this" {
   depends_on       = [aws_lambda_permission.with_lb]
 }
 
-resource "aws_lb_listener" "http_listner" {
+resource "aws_lb_listener" "http_listener" {
   load_balancer_arn = data.terraform_remote_state.core.outputs.core_internal_alb_arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.lambda_tg.arn
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Service unavailable"
+      status_code  = 503
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "http_path_rule" {
+  listener_arn = aws_lb_listener.http_listener.arn
+  priority     = 1
+
+  action {
     type             = "forward"
+    target_group_arn = aws_lb_target_group.lambda_tg.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/order-service"]
+    }
   }
 }

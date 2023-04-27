@@ -30,6 +30,11 @@ output "core_cognito_user_pool_client_id" {
   value = module.core-service.core_cognito_user_pool_client["id"]
 }
 
+output "core_cognito_user_pool_client_secret" {
+  value = module.core-service.core_cognito_user_pool_client_secret
+  sensitive = true
+}
+
 output "core_cognito_user_pool_id" {
   value = module.core-service.core_cognito_user_pool["id"]
 }
