@@ -1,6 +1,5 @@
-##TODO : change this structure of locals
 locals {
-  name = "core-service"
+  name = "scn-1"
   tags = {
     environment = "dev"
     terraform   = "true"

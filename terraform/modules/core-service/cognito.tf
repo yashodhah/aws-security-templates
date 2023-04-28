@@ -7,14 +7,13 @@ resource "aws_cognito_user_pool_domain" "pool_domain" {
   user_pool_id = aws_cognito_user_pool.pool.id
 }
 
-#TODO
 resource "aws_cognito_resource_server" "resource" {
-  identifier = "${local.name}-resource-serer"
-  name       = "${local.name}-resource-server"
+  identifier = "order-resource-server"
+  name       = "order-resource-server"
 
   scope {
     scope_name        = "order:read"
-    scope_description = "Read access for order service"
+    scope_description = "Read access to the order service"
   }
 
   user_pool_id = aws_cognito_user_pool.pool.id

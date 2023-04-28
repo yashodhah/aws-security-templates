@@ -3,5 +3,5 @@ module "core-service" {
 }
 
 module "external-service" {
-  source      = "../../modules/external-service"
+  source = "../../modules/external-service"
 }

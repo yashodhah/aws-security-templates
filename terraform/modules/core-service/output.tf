@@ -7,7 +7,7 @@ output "core_vpc_id" {
 }
 
 output "core_vpc_cidr" {
-  value       = module.vpc.vpc_cidr_block
+  value = module.vpc.vpc_cidr_block
 }
 
 output "core_vpc_private_subnets" {
@@ -36,9 +36,4 @@ output "core_cognito_user_pool" {
 
 output "core_cognito_user_pool_client" {
   value = aws_cognito_user_pool_client.user_pool_client
-}
-
-output "core_cognito_user_pool_client_secret" {
-  value = aws_cognito_user_pool_client.user_pool_client.client_secret
-  sensitive = true
 }

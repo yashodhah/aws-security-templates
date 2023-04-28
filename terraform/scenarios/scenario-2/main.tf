@@ -1,6 +1,5 @@
-#TODO : change this structure of locals
 locals {
-  name = "core-service"
+  name = "scn-2"
   tags = {
     environment = "dev"
     scenario    = "2"
@@ -49,6 +48,7 @@ module "order_service_lambda" {
     ENVIRONMENT  = "dev"
     USER_POOL_ID = data.terraform_remote_state.core.outputs.core_cognito_user_pool_id
     CLIENT_ID    = data.terraform_remote_state.core.outputs.core_cognito_user_pool_client_id
+    SCOPE        = "order-resource-server/order:read"
   }
 
   tags = local.tags
