@@ -8,7 +8,7 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
-.idea
+.idea/**
 *.iws
 *.iml
 *.ipr
@@ -37,3 +37,13 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+**/node_modules
+
+.terraform
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
+*.tfstate
+*.tfstate.backup
+terraform/scenarios/*/builds/**
+terraform_output_*.json
