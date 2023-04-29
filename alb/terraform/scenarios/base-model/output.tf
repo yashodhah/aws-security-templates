@@ -30,6 +30,11 @@ output "core_cognito_user_pool_client_id" {
   value = module.core-service.core_cognito_user_pool_client["id"]
 }
 
+#This is only to make things simple. It's not a wise idea to display sensitive information on the console
+output "core_cognito_user_pool_client_secret" {
+  value = nonsensitive(module.core-service.core_cognito_user_pool_client["client_secret"])
+}
+
 output "core_cognito_user_pool_id" {
   value = module.core-service.core_cognito_user_pool["id"]
 }

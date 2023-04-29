@@ -23,7 +23,7 @@ resource "aws_apigatewayv2_route" "gateway_service_a_route" {
   authorizer_id        = aws_apigatewayv2_authorizer.jwt_auth.id
   authorization_type   = "JWT"
   authorization_scopes = ["order-resource-server/order:read"]
-  route_key            = "ANY /{proxy+}"
+  route_key            = "ANY /order-service"
   target               = "integrations/${aws_apigatewayv2_integration.alb_integrations.id}"
 }
 
