@@ -1,6 +1,6 @@
 # AWS Security Templates
 
-This repository contains security templates for common use cases that can be used to secure your AWS infrastructure. These templates are written in Terraform, a popular infrastructure-as-code tool.
+This repository contains security templates for common use cases that can be used to secure your AWS infrastructure. These templates are written in Terraform.
 
 ## Usage
 
