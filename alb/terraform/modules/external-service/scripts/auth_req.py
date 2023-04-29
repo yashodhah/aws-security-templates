@@ -7,6 +7,8 @@ def get_access_token():
     scope = os.environ.get('SCOPE')
     token_endpoint = os.environ.get('TOKEN_ENDPOINT')
 
+    print("Getting an access token from :", token_endpoint)
+
     headers = {
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -22,6 +24,8 @@ def get_access_token():
 
     if response.status_code == 200:
         access_token = response.json()['access_token']
+        print("Access token :", access_token)
+
         return access_token
     else:
         print("Error getting access token:", response.text)

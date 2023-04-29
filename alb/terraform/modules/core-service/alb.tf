@@ -12,26 +12,6 @@ module "alb" {
   #    bucket = aws_s3_bucket.log_bucket.id
   #  }
 
-  #  target_groups = [
-  #    {
-  #      target_type = "lambda"
-  #      targets     = {
-  #        lambda_with_allowed_triggers = {
-  #          target_id = module.order_service_lambda_alias.lambda_alias_arn
-  #        }
-  #      }
-  #    }
-  #  ]
-  #
-  #  http_tcp_listeners = [
-  #    {
-  #      port               = 80
-  #      protocol           = "HTTP"
-  #      #      path               = "api/service-b/order-service"
-  #      target_group_index = 0
-  #    }
-  #  ]
-
   tags = local.tags
 }
 
