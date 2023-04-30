@@ -39,9 +39,8 @@ output "core_cognito_user_pool_id" {
   value = module.core-service.core_cognito_user_pool["id"]
 }
 
-#TODO generalize region
 output "core_cognito_token_endpoint" {
-  value = "https://${module.core-service.core_cognito_domain_name}.auth.ap-south-1.amazoncognito.com/oauth2/token"
+  value = "https://${module.core-service.core_cognito_domain_name}.auth.${var.aws_region}.amazoncognito.com/oauth2/token"
 }
 
 output "core_internal_alb_dns_name" {
